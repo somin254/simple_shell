@@ -25,13 +25,5 @@ int interactive(info_t *infos);
 int _isalpha(int ch);
 int _atoi(char *str);
 int is_delim(char ch, char *delime);
-int changeCurrentDirectory(info_t *infos);
-int printCurrentEnvironment(info_t *infos);
-int initializeOrModifyEnvVar(info_t *infos);
-char *getEnvVarValue(info_t *infos, const char *names);
-int populateEnvList(info_t *info);
-int populateEnvList(info_t *info);
-int removeEnvVar(info_t *infos);
-int showHelp(info_t *infos);
 
 #endif
