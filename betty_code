@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/**
+ * main - this is the prototype
+ * Return: 0
+ */
+int main()
+{
+char *li = null;
+size_t len = 0;
+ssize_t nread;
+while (1)
+{
+printf("$ ");
+fflush(stdout);
+nread = getline(&li, &len, stdin);
+if (nread == -1)
+{
+break;
+}
+printf("%s", line);
+}
+free(li);
+return 0;
+}
