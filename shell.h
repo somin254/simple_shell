@@ -4,7 +4,7 @@
 /*-----LIBRARIES---*/
 #include <stdio.h>
 #include <unistd.h>
-
+#define WRITE_BUF_SIZE 256
 /*--PROTOTYPES---*/
 
 int changeCurrentDirectory(info_t *infos);
@@ -25,5 +25,10 @@ int interactive(info_t *infos);
 int _isalpha(int ch);
 int _atoi(char *str);
 int is_delim(char ch, char *delime);
+
+typedef struct {
+} info_t;
+int changeCurrentDirectory(info_t *infos);
+int printCurrentEnvironment(info_t *infos);
 
 #endif
