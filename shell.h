@@ -1,9 +1,6 @@
-#ifndef SHELL_H
-#define SHELL_H
+#ifndef CISFUN_SHELL_H
+#define CISFUN_SHELL_H
 
-/*-----LIBRARIES---*/
-#include <stdio.h>
-#include <unistd.h>
 #include <stdlib.h>
 
 #define WRITE_BUF_SIZE 256
@@ -25,27 +22,27 @@ typedef struct {
     const char *prompt;
 } info_t;
 
-/*--PROTOTYPES---*/
-
+/* Prototypes */
 int changeCurrentDirectory(info_t *infos);
 int printCurrentEnvironment(info_t *infos);
 int initializeOrModifyEnvVar(info_t *infos);
-char *getEnvVarValue(info_t *infos, const char *names);
+char *getEnvVarValue(info_t *infos, const char *name);
 int populateEnvList(info_t *info);
 int removeEnvVar(info_t *infos);
 int showHelp(info_t *infos);
 int exitShell(info_t *infos);
-/*errors.c*/
+
+/* Errors */
 void _eputs(char *str);
 int _putfd(char ch, int fd);
 int _putsfd(char *str, int fd);
 int _eputchar(char ch);
-/*_ATOI.C*/
+
+/* _ATOI.C */
 int interactive(info_t *infos);
 int _isalpha(int ch);
 int _atoi(char *str);
-int is_delim(char ch, char *delime);
-
+int is_delim(char ch, char *delim);
 
 void _puts(const char *str);
 char *_getenv(info_t *infos, const char *name);
@@ -55,6 +52,7 @@ void print_error(info_t *infos, const char *message);
 void _setenv(info_t *infos, const char *name, const char *value);
 int _erratoi(const char *str);
 
+<<<<<<< HEAD
 
 /**ENVIROMENT**/
 void print_list_str(list_t *head);
@@ -71,4 +69,7 @@ void _setenv_array(info_t *infos, const char *name, const char *value);
 void _unsetenv_array(info_t *infos, const char *name);
 
 #endif
+=======
+#endif /* CISFUN_SHELL_H */
+>>>>>>> ed440e822346ed830b6ab580e383428e7f0ab375
 
