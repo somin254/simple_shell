@@ -1,26 +1,38 @@
 #include <stdio.h>
-#include "shell.h"
+#include <stdlib.h>
+#include <string.h>
+
 /**
- * example_function - An example function following Betty style
- * @param1: Description of the first parameter
- * @param2: Description of the second parameter
- *
- * Return: Description of the return value
+ * main - this is the prototype
+ * Return: 0
  */
-int example_function(int param1, char *param2)
+int main()
 {
-if (param1 == 0)
-{
-printf("Parameter 1 is 0.\n");
+    char *li = NULL;  // Use NULL instead of null
+    size_t len = 0;
+    ssize_t nread;
+
+    while (1)
+    {
+        printf("$ ");
+        fflush(stdout);
+        nread = getline(&li, &len, stdin);
+
+        if (nread == -1)
+        {
+            break;
+        }
+
+        // Remove newline character if present
+        if (li[nread - 1] == '\n')
+        {
+            li[nread - 1] = '\0';
+        }
+
+        printf("%s\n", li);  // Use li instead of line
+    }
+
+    free(li);
+    return 0;
 }
-else
-{
-printf("Parameter 1 is not 0.\n");
-}
-while (*param2 != '\0')
-{
-_putchar(*param2);
-param2++;
-}
-return 0;
-}
+
