@@ -35,4 +35,3 @@ int main()
     free(li);
     return 0;
 }
-
