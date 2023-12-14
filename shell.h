@@ -6,20 +6,38 @@
 #define WRITE_BUF_SIZE 256
 #define PROMPT "#cisfun$ "
 
-typedef struct list_t {
-    char *str;
-    struct list_t *next;
+/**
+ * struct list_t - Definition of a linked list node
+ * @str: String data
+ * @next: Pointer to the next node
+ */
+typedef struct list_t
+{
+	char *str;               /* String data */
+	struct list_t *next;     /* Pointer to the next node */
 } list_t;
 
-typedef struct {
-    char **argv;
-    char **env;
-    int argc;
-    int status;
-    int err_num;
-    int readfd;
-    list_t *env_list;
-    const char *prompt;
+/**
+ * struct info_t - Definition of information struct for the shell
+ * @argv: Argument vector
+ * @env: Environment variables
+ * @argc: Argument count
+ * @status: Status indicator
+ * @err_num: Error number
+ * @readfd: File descriptor for reading
+ * @env_list: Linked list of environment variables
+ * @prompt: Shell prompt
+ */
+typedef struct info_t
+{
+	char **argv;            /* Argument vector */
+	char **env;             /* Environment variables */
+	int argc;               /* Argument count */
+	int status;             /* Status indicator */
+	int err_num;            /* Error number */
+	int readfd;             /* File descriptor for reading */
+	list_t *env_list;       /* Linked list of environment variables */
+	const char *prompt;     /* Shell prompt */
 } info_t;
 
 /* Prototypes */
