@@ -8,10 +8,11 @@
  */
 int main()
 {
-    char *li = NULL;
-    size_t len = 0;
-    ssize_t nread;
+char *li = NULL;
+size_t len = 0;
+ssize_t nread;
 while (1)
+
 {
 printf("$ ");
 fflush(stdout);
