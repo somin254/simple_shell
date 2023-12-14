@@ -1,37 +1,13 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <unistd.h>
 
 /**
- * main - this is the prototype
- * Return: 0
+ * _putchar - writes the character c to stdout
+ * @c: The character to print
+ *
+ * Return: On success 1.
+ * On error, -1 is returned, and errno is set appropriately.
  */
-int main()
+int _putchar(char c)
 {
-    char *li = NULL;  // Use NULL instead of null
-    size_t len = 0;
-    ssize_t nread;
-
-    while (1)
-    {
-        printf("$ ");
-        fflush(stdout);
-        nread = getline(&li, &len, stdin);
-
-        if (nread == -1)
-        {
-            break;
-        }
-
-        // Remove newline character if present
-        if (li[nread - 1] == '\n')
-        {
-            li[nread - 1] = '\0';
-        }
-
-        printf("%s\n", li);  // Use li instead of line
-    }
-
-    free(li);
-    return 0;
+        return (write(1, &c, 1));
 }
