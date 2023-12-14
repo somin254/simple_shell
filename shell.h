@@ -21,8 +21,8 @@ typedef struct {
     int status;
     int err_num;
     int readfd;
-    list_t *env_list;  // Linked list for environment variables
-    const char *prompt; // Prompt string
+    list_t *env_list;
+    const char *prompt;
 } info_t;
 
 /*--PROTOTYPES---*/

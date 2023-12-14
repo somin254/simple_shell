@@ -1,4 +1,4 @@
-/**
+ /**
  * main - Entry point for the simple shell.
  *
  * This shell takes a single command at a time, executes it, and waits for
@@ -29,9 +29,7 @@ int main(void) {
             printf("\n");
             break;
         }
-
-        // Remove the trailing newline character
-        command[strcspn(command, "\n")] = '\0';
+command[strcspn(command, "\n")] = '\0';
 
         if (strcmp(command, "exit") == 0) {
             break;
@@ -46,22 +44,18 @@ int main(void) {
             // Child process
             if (execlp(command, command, NULL) == -1) {
                 perror("execlp");
-                exit(EXIT_FAILURE);
+exit(EXIT_FAILURE);
             }
         } else {
-            // Parent process
-            int status;
-            if (waitpid(pid, &status, 0) == -1) {
-                perror("waitpid");
-                exit(EXIT_FAILURE);
-            }
-
-            if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
-                fprintf(stderr, "./shell: %s: command not found\n", command);
-            }
-        }
-    }
-
-    return 0;
+int status;
+if (waitpid(pid, &status, 0) == -1) {
+perror("waitpid");
+exit(EXIT_FAILURE);
 }
-
+if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
+fprintf(stderr, "./shell: %s: command not found\n", command);
+}
+}
+}
+return 0;
+}
