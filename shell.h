@@ -1,10 +1,13 @@
 #ifndef SHELL_H
 #define SHELL_H
- 
+
 /*-----LIBRARIES---*/
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+
+#define WRITE_BUF_SIZE 256
+#define PROMPT "#cisfun$ "
 
 typedef struct list_t {
     char *str;
@@ -18,11 +21,9 @@ typedef struct {
     int status;
     int err_num;
     int readfd;
-    list_t *env_list;
-} 
-info_t;
-
-#define WRITE_BUF_SIZE 256
+    list_t *env_list;  // Linked list for environment variables
+    const char *prompt; // Prompt string
+} info_t;
 
 /*--PROTOTYPES---*/
 
@@ -45,6 +46,5 @@ int _isalpha(int ch);
 int _atoi(char *str);
 int is_delim(char ch, char *delime);
 
-
-
 #endif
+
