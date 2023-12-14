@@ -1,29 +1,26 @@
 #include <stdio.h>
 #include "shell.h"
-
 /**
- * example_function - An example function following Betty style.
- * @param1: Description of the first parameter.
- * @param2: Description of the second parameter.
+ * example_function - An example function following Betty style
+ * @param1: Description of the first parameter
+ * @param2: Description of the second parameter
  *
- * Return: Description of the return value.
+ * Return: Description of the return value
  */
 int example_function(int param1, char *param2)
 {
-    if (param1 == 0)
-    {
-        printf("Parameter 1 is 0.\n");
-    }
-    else
-    {
-        printf("Parameter 1 is not 0.\n");
-    }
-
-    while (*param2 != '\0')
-    {
-        _putchar(*param2);
-        param2++;
-    }
-
-    return 0;
+if (param1 == 0)
+{
+printf("Parameter 1 is 0.\n");
+}
+else
+{
+printf("Parameter 1 is not 0.\n");
+}
+while (*param2 != '\0')
+{
+_putchar(*param2);
+param2++;
+}
+return 0;
 }
