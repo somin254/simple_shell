@@ -46,5 +46,14 @@ int _isalpha(int ch);
 int _atoi(char *str);
 int is_delim(char ch, char *delime);
 
+
+void _puts(const char *str);
+char *_getenv(info_t *infos, const char *name);
+int _strcmp(const char *s1, const char *s2);
+void _putchar(char c);
+void print_error(info_t *infos, const char *message);
+void _setenv(info_t *infos, const char *name, const char *value);
+int _erratoi(const char *str);
+
 #endif
 
