@@ -55,5 +55,20 @@ void print_error(info_t *infos, const char *message);
 void _setenv(info_t *infos, const char *name, const char *value);
 int _erratoi(const char *str);
 
+
+/**ENVIROMENT**/
+void print_list_str(list_t *head);
+int starts_with(const char *str, const char *prefix);
+void add_node_end(list_t **head, const char *str, int len);
+int _setenv(info_t *infos, const char *name, const char *value);
+void _unsetenv(info_t *infos, const char *name);
+
+
+/*--PROTOTYPES---*/
+
+void _setenv(info_t *infos, const char *name, const char *value);
+void _setenv_array(info_t *infos, const char *name, const char *value);
+void _unsetenv_array(info_t *infos, const char *name);
+
 #endif
 

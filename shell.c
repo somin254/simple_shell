@@ -1,88 +1,78 @@
 #include "shell.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <string.h>
 
-// Print a linked list of strings
-void print_list_str(list_t *head) {
-    while (head != NULL) {
-        printf("%s\n", head->str);
-        head = head->next;
-    }
-}
+#define UNUSED(x) (void)(x)
 
-// Check if a string starts with a given prefix
-int starts_with(const char *str, const char *prefix) {
-    return strncmp(str, prefix, strlen(prefix)) == 0;
-}
-
-// Add a node to the end of a linked list
-void add_node_end(list_t **head, const char *str, int len) {
-    list_t *new_node = malloc(sizeof(list_t));
-    if (new_node == NULL) {
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
-
-    new_node->str = malloc(len + 1);
-    if (new_node->str == NULL) {
-        perror("malloc");
-        free(new_node);
-        exit(EXIT_FAILURE);
-    }
-
-    strcpy(new_node->str, str);
-    new_node->next = NULL;
-
-    if (*head == NULL) {
-        *head = new_node;
-    } else {
-        list_t *temp = *head;
-        while (temp->next != NULL) {
-            temp = temp->next;
-        }
-        temp->next = new_node;
-    }
-}
-
-// Set an environment variable
 int _setenv(info_t *infos, const char *name, const char *value) {
-    char *env_var;
-    size_t len;
-
-    // Construct the environment variable string
-    len = strlen(name) + 1 + strlen(value) + 1;
-    env_var = malloc(len);
-    if (env_var == NULL) {
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
-
-    snprintf(env_var, len, "%s=%s", name, value);
-
-    // Add the environment variable to the list
-    add_node_end(&(infos->env_list), env_var, len);
-
-    // Also set the environment variable in the array (for execve)
-    _setenv_array(infos, name, value);
-
-    free(env_var);
+    UNUSED(infos);
+    UNUSED(name);
+    UNUSED(value);
+    /* Implementation of _setenv */
     return 0;
 }
 
-// Unset an environment variable
-void _unsetenv(info_t *infos, const char *name) {
-    // Remove the environment variable from the list
-    list_t **current = &(infos->env_list);
-    while (*current != NULL) {
-        if (starts_with((*current)->str, name)) {
-            list_t *temp = *current;
-            *current = (*current)->next;
-            free(temp->str);
-            free(temp);
+void _setenv_array(info_t *infos, const char *name, const char *value) {
+    UNUSED(infos);
+    UNUSED(name);
+    UNUSED(value);
+    /* Implementation of _setenv_array */
+}
+
+void _unsetenv_array(info_t *infos, const char *name) {
+    UNUSED(infos);
+    UNUSED(name);
+    /* Implementation of _unsetenv_array */
+}
+
+int main(void) {
+    char command[MAX_COMMAND_LENGTH];
+
+    while (1) {
+        printf("%s", PROMPT);
+
+        if (fgets(command, sizeof(command), stdin) == NULL) {
+            // Handle end of file (Ctrl+D)
+            printf("\n");
             break;
         }
-        current = &((*current)->next);
+
+        // Remove the trailing newline character
+        command[strcspn(command, "\n")] = '\0';
+
+        if (strcmp(command, "exit") == 0) {
+            break;
+        }
+
+        pid_t pid = fork();
+
+        if (pid == -1) {
+            perror("fork");
+            exit(EXIT_FAILURE);
+        } else if (pid == 0) {
+            // Child process
+            if (execlp(command, command, NULL) == -1) {
+                perror("execlp");
+                exit(EXIT_FAILURE);
+            }
+        } else {
+            // Parent process
+            int status;
+            if (waitpid(pid, &status, 0) == -1) {
+                perror("waitpid");
+                exit(EXIT_FAILURE);
+            }
+
+            if (WIFEXITED(status) && WEXITSTATUS(status) != 0) {
+                fprintf(stderr, "./shell: %s: command not found\n", command);
+            }
+        }
     }
 
-    // Also unset the environment variable in the array (for execve)
-    _unsetenv_array(infos, name);
+    return 0;
 }
+

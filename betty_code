@@ -8,20 +8,31 @@
  */
 int main()
 {
-char *li = null;
-size_t len = 0;
-ssize_t nread;
-while (1)
-{
-printf("$ ");
-fflush(stdout);
-nread = getline(&li, &len, stdin);
-if (nread == -1)
-{
-break;
+    char *li = NULL;  // Use NULL instead of null
+    size_t len = 0;
+    ssize_t nread;
+
+    while (1)
+    {
+        printf("$ ");
+        fflush(stdout);
+        nread = getline(&li, &len, stdin);
+
+        if (nread == -1)
+        {
+            break;
+        }
+
+        // Remove newline character if present
+        if (li[nread - 1] == '\n')
+        {
+            li[nread - 1] = '\0';
+        }
+
+        printf("%s\n", li);  // Use li instead of line
+    }
+
+    free(li);
+    return 0;
 }
-printf("%s", line);
-}
-free(li);
-return 0;
-}
+
