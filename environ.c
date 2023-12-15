@@ -1,4 +1,5 @@
 #include "shell.h"
+#include <stdint.h>
 
 /**
  * printCurrentEnvironment - Prints the current environment.
@@ -8,29 +9,8 @@
  */
 int printCurrentEnvironment(info_t *infos)
 {
-	print_list_str(infos->env);
-	return (0);
-}
-
-/**
- * initializeOrModifyEnvVar - Initializes a new environment variable
- * or modifies an existing one.
- * @infos: Struct containing arguments, used to maintain const func prototype.
- *
- * Return: Always 0.
- */
-int initializeOrModifyEnvVar(info_t *infos)
-{
-	if (infos->argc != 3)
-	{
-		_eputs("Incorrect number of arguments\n");
-		return (1);
-	}
-
-	if (_setenv(infos, infos->argv[1], infos->argv[2]))
-		return (0);
-
-	return (1);
+    print_list_str((list_t *)infos->env);
+    return 0;
 }
 
 /**
@@ -42,18 +22,21 @@ int initializeOrModifyEnvVar(info_t *infos)
  */
 char *getEnvVarValue(info_t *infos, const char *names)
 {
-	list_t *currentNode = infos->env;
-	char *position;
+    list_t *currentNode = (list_t *)infos->env;
+    char *position = NULL;
 
-	while (currentNode)
-	{
-		position = starts_with(currentNode->str, names);
-		if (position && *position)
-			return (position);
-		currentNode = currentNode->next;
-	}
+    while (currentNode)
+    {
+        uintptr_t result = starts_with(currentNode->str, names);
+        if (result && *(char *)result)
+        {
+            position = (char *)(uintptr_t)result;
+            break; /* Exit the loop if a match is found */
+        }
+        currentNode = currentNode->next;
+    }
 
-	return (NULL);
+    return position;
 }
 
 /**
@@ -64,14 +47,16 @@ char *getEnvVarValue(info_t *infos, const char *names)
  */
 int populateEnvList(info_t *info)
 {
-	list_t *node = NULL;
-	size_t index;
+    list_t *node = NULL;
+    size_t index;
 
-	for (index = 0; environ[index]; index++)
-		add_node_end(&node, environ[index], 0);
+    extern char **environ; /* Declare extern to use the global variable */
 
-	info->env = node;
-	return (0);
+    for (index = 0; environ[index]; index++)
+        add_node_end(&node, environ[index], 0);
+
+    info->env = (void *)node;
+    return 0;
 }
 
 /**
@@ -82,16 +67,17 @@ int populateEnvList(info_t *info)
  */
 int removeEnvVar(info_t *infos)
 {
-	int index;
+    int index;
 
-	if (infos->argc == 1)
-	{
-		_eputs("Too few arguments.\n");
-		return (1);
-	}
+    if (infos->argc == 1)
+    {
+        _eputs("Too few arguments.\n");
+        return 1;
+    }
 
-	for (index = 1; index <= infos->argc; index++)
-		_unsetenv(infos, infos->argv[index]);
+    for (index = 1; index < infos->argc; index++)
+        _unsetenv(infos, infos->argv[index]);
 
-	return (0);
+    return 0;
 }
+

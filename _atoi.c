@@ -1,4 +1,5 @@
 #include "shell.h"
+#include <unistd.h>
 
 /**
  * interactive - Checks if the shell is in interactive mode.
@@ -8,7 +9,7 @@
  */
 int interactive(info_t *infos)
 {
-	return (isatty(STDIN_FILENO) && infos->readfd <= 2);
+    return (isatty(STDIN_FILENO) && infos->readfd <= 2);
 }
 
 /**
@@ -19,7 +20,7 @@ int interactive(info_t *infos)
  */
 int _isalpha(int ch)
 {
-	return ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'));
+    return ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'));
 }
 
 /**
@@ -30,29 +31,29 @@ int _isalpha(int ch)
  */
 int _atoi(char *str)
 {
-	int z, signs = 1, flags = 0, outputs;
-	unsigned int result = 0;
+    int z, signs = 1, flags = 0, outputs;
+    unsigned int result = 0;
 
-	for (z = 0; str[z] != '\0' && flags != 2; z++)
-	{
-		if (str[z] == '-')
-			signs *= -1;
-		if (str[z] >= '0' && str[z] <= '9')
-		{
-			flags = 1;
-			result *= 10;
-			result += (str[z] - '0');
-		}
-		else if (flags == 1)
-			flags = 2;
-	}
+    for (z = 0; str[z] != '\0' && flags != 2; z++)
+    {
+        if (str[z] == '-')
+            signs *= -1;
+        if (str[z] >= '0' && str[z] <= '9')
+        {
+            flags = 1;
+            result *= 10;
+            result += (str[z] - '0');
+        }
+        else if (flags == 1)
+            flags = 2;
+    }
 
-	if (signs == -1)
-		outputs = -result;
-	else
-		outputs = result;
+    if (signs == -1)
+        outputs = -result;
+    else
+        outputs = result;
 
-	return (outputs);
+    return (outputs);
 }
 
 /**
@@ -64,9 +65,10 @@ int _atoi(char *str)
  */
 int is_delim(char ch, char *delime)
 {
-	while (*delime)
-		if (*delime++ == ch)
-			return (1);
+    while (*delime)
+        if (*delime++ == ch)
+            return (1);
 
-	return (0);
+    return (0);
 }
+

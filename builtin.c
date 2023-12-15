@@ -8,46 +8,46 @@
  */
 int changeCurrentDirectory(info_t *infos)
 {
-	char *currentPath, *dir, buffer[1024];
-	int chdirResult;
+        char *currentPath, *dir, buffer[1024];
+        int chdirResult;
 
-	currentPath = getcwd(buffer, 1024);
-	if (!currentPath)
-		_puts("TODO: >>getcwd failure emsg here<<\n");
+        currentPath = getcwd(buffer, 1024);
+        if (!currentPath)
+                _eputs("TODO: >>getcwd failure emsg here<<\n");
 
-	if (!infos->argv[1])
-	{
-		dir = _getenv(infos, "HOME=");
-		if (!dir)
-			chdirResult = chdir((dir = _getenv(infos, "PWD=")) ? dir : "/");
-		else
-			chdirResult = chdir(dir);
-	}
-	else if (_strcmp(infos->argv[1], "-") == 0)
-	{
-		if (!_getenv(infos, "OLDPWD="))
-		{
-			_puts(currentPath);
-			_putchar('\n');
-			return (1);
-		}
-		_puts(_getenv(infos, "OLDPWD=")), _putchar('\n');
-		chdirResult = chdir((dir = _getenv(infos, "OLDPWD=")) ? dir : "/");
-	}
-	else
-		chdirResult = chdir(infos->argv[1]);
+        if (!infos->argv[1])
+        {
+                dir = _getenv(infos, "HOME=");
+                if (!dir)
+                        chdirResult = chdir((dir = _getenv(infos, "PWD=")) ? dir : "/");
+                else
+                        chdirResult = chdir(dir);
+        }
+        else if (_strcmp(infos->argv[1], "-") == 0)
+        {
+                if (!_getenv(infos, "OLDPWD="))
+                {
+                        _puts(currentPath);
+                        _putchar('\n');
+                        return (1);
+                }
+                _puts(_getenv(infos, "OLDPWD=")), _putchar('\n');
+                chdirResult = chdir((dir = _getenv(infos, "OLDPWD=")) ? dir : "/");
+        }
+        else
+                chdirResult = chdir(infos->argv[1]);
 
-	if (chdirResult == -1)
-	{
-		print_error(infos, "can't cd to ");
-		_eputs(infos->argv[1]), _eputchar('\n');
-	}
-	else
-	{
-		_setenv(infos, "OLDPWD", _getenv(infos, "PWD="));
-		_setenv(infos, "PWD", getcwd(buffer, 1024));
-	}
-	return (0);
+        if (chdirResult == -1)
+        {
+                print_error(infos, "can't cd to ");
+                _eputs(infos->argv[1]), _eputchar('\n');
+        }
+        else
+        {
+                _setenv(infos, "OLDPWD", _getenv(infos, "PWD="));
+                _setenv(infos, "PWD", getcwd(buffer, 1024));
+        }
+        return (0);
 }
 
 /**
@@ -58,15 +58,15 @@ int changeCurrentDirectory(info_t *infos)
  */
 int showHelp(info_t *infos)
 {
-	char **argumentsArray;
+        char **argumentsArray;
 
-	argumentsArray = infos->argv;
-	_puts("help call works. Function not yet implemented \n");
+        argumentsArray = infos->argv;
+        _puts("help call works. Function not yet implemented \n");
 
-	if (0)
-		_puts(*argumentsArray);
+        if (0)
+                _puts(*argumentsArray);
 
-	return (0);
+        return (0);
 }
 
 /**
@@ -77,23 +77,24 @@ int showHelp(info_t *infos)
  */
 int exitShell(info_t *infos)
 {
-	int exitStatus;
+        int exitStatus;
 
-	if (infos->argv[1])
-	{
-		exitStatus = _erratoi(infos->argv[1]);
-		if (exitStatus == -1)
-		{
-			infos->status = 2;
-			print_error(infos, "Illegal number: ");
-			_eputs(infos->argv[1]);
-			_eputchar('\n');
-			return (1);
-		}
-		infos->err_num = _erratoi(infos->argv[1]);
-		return (-2);
-	}
+        if (infos->argv[1])
+        {
+                exitStatus = _erratoi(infos->argv[1]);
+                if (exitStatus == -1)
+                {
+                        infos->status = 2;
+                        print_error(infos, "Illegal number: ");
+                        _eputs(infos->argv[1]);
+                        _eputchar('\n');
+                        return (1);
+                }
+                infos->err_num = _erratoi(infos->argv[1]);
+                return (-2);
+        }
 
-	infos->err_num = -1;
-	return (-2);
+        infos->err_num = -1;
+        return (-2);
 }
+

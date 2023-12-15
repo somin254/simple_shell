@@ -6,61 +6,53 @@
 #include <sys/wait.h>
 #include <string.h>
 
-#define UNUSED(x) (void)(x)
+#define MAX_COMMAND_LENGTH 256
 
-int _setenv(info_t *infos, const char *name, const char *value) {
-    UNUSED(infos);
-    UNUSED(name);
-    UNUSED(value);
+void _setenv(info_t *infos, const char *name, const char *value) {
     /* Implementation of _setenv */
-    return 0;
 }
 
 void _setenv_array(info_t *infos, const char *name, const char *value) {
-    UNUSED(infos);
-    UNUSED(name);
-    UNUSED(value);
     /* Implementation of _setenv_array */
 }
 
 void _unsetenv_array(info_t *infos, const char *name) {
-    UNUSED(infos);
-    UNUSED(name);
     /* Implementation of _unsetenv_array */
 }
 
 int main(void) {
     char command[MAX_COMMAND_LENGTH];
+    pid_t pid;
 
     while (1) {
-        printf("%s", PROMPT);
-
-        if (fgets(command, sizeof(command), stdin) == NULL) {
-            // Handle end of file (Ctrl+D)
-            printf("\n");
-            break;
-        }
-
-        // Remove the trailing newline character
-        command[strcspn(command, "\n")] = '\0';
-
-        if (strcmp(command, "exit") == 0) {
-            break;
-        }
-
-        pid_t pid = fork();
+        pid = fork();
 
         if (pid == -1) {
             perror("fork");
             exit(EXIT_FAILURE);
         } else if (pid == 0) {
-            // Child process
+            /* Child process */
+            printf("%s", PROMPT);
+
+            if (fgets(command, sizeof(command), stdin) == NULL) {
+                /* Handle end of file (Ctrl+D) */
+                printf("\n");
+                break;
+            }
+
+            /* Remove the trailing newline character */
+            command[strcspn(command, "\n")] = '\0';
+
+            if (strcmp(command, "exit") == 0) {
+                exit(EXIT_SUCCESS);
+            }
+
             if (execlp(command, command, NULL) == -1) {
                 perror("execlp");
                 exit(EXIT_FAILURE);
             }
         } else {
-            // Parent process
+            /* Parent process */
             int status;
             if (waitpid(pid, &status, 0) == -1) {
                 perror("waitpid");
@@ -75,4 +67,3 @@ int main(void) {
 
     return 0;
 }
-
