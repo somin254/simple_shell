@@ -1,83 +1,92 @@
 #include "shell.h"
-#include <stdint.h>
 
 /**
- * printCurrentEnvironment - Prints the current environment.
- * @infos: Struct containing arguments, used to maintain const func prototype.
- *
+ * _myenv - Prints the current environment.
+ * @info: Structure containing potential arguments. Used to maintain
+ *          constant function prototype.
  * Return: Always 0.
  */
-int printCurrentEnvironment(info_t *infos)
+int _myenv(info_t *info)
 {
-    print_list_str((list_t *)infos->env);
-    return 0;
+	print_list_str(info->env);
+	return (0);
 }
 
 /**
- * getEnvVarValue - Gets the value of an environment variable.
- * @infos: Struct containing arguments, used to maintain.
- * @names: Environment variable name.
- *
- * Return: Value of the environment variable.
+ * _getenv - Gets the value of an environment variable.
+ * @info: Structure containing potential arguments. Used to maintain
+ * @name: Env var name.
+ * Return: The value.
  */
-char *getEnvVarValue(info_t *infos, const char *names)
+char *_getenv(info_t *info, const char *name)
 {
-    list_t *currentNode = (list_t *)infos->env;
-    char *position = NULL;
+	list_t *node = info->env;
+	char *p;
 
-    while (currentNode)
-    {
-        uintptr_t result = starts_with(currentNode->str, names);
-        if (result && *(char *)result)
-        {
-            position = (char *)(uintptr_t)result;
-            break; /* Exit the loop if a match is found */
-        }
-        currentNode = currentNode->next;
-    }
-
-    return position;
+	while (node)
+	{
+		p = starts_with(node->str, name);
+		if (p && *p)
+			return (p);
+		node = node->next;
+	}
+	return (NULL);
 }
 
 /**
- * populateEnvList - Populates the environment linked list.
- * @info: Struct containing arguments, used to maintain const func prototype.
- *
+ * _mysetenv - Initializes a new environment variable,
+ *             or modifies an existing one.
+ * @info: Structure containing potential arguments. Used to maintain
+ *        constant function prototype.
  * Return: Always 0.
  */
-int populateEnvList(info_t *info)
+int _mysetenv(info_t *info)
 {
-    list_t *node = NULL;
-    size_t index;
-
-    extern char **environ; /* Declare extern to use the global variable */
-
-    for (index = 0; environ[index]; index++)
-        add_node_end(&node, environ[index], 0);
-
-    info->env = (void *)node;
-    return 0;
+	if (info->argc != 3)
+	{
+		_eputs("Incorrect number of arguments\n");
+		return (1);
+	}
+	if (_setenv(info, info->argv[1], info->argv[2]))
+		return (0);
+	return (1);
 }
 
 /**
- * removeEnvVar - Removes an environment variable.
- * @infos: Struct containing arguments, used to maintain const func prototype.
- *
+ * _myunsetenv - Removes an environment variable.
+ * @info: Structure containing potential arguments. Used to maintain
+ *        constant function prototype.
  * Return: Always 0.
  */
-int removeEnvVar(info_t *infos)
+int _myunsetenv(info_t *info)
 {
-    int index;
+	int i;
 
-    if (infos->argc == 1)
-    {
-        _eputs("Too few arguments.\n");
-        return 1;
-    }
+	if (info->argc == 1)
+	{
+		_eputs("Too few arguments.\n");
+		return (1);
+	}
+	for (i = 1; i <= info->argc; i++)
+		_unsetenv(info, info->argv[i]);
 
-    for (index = 1; index < infos->argc; index++)
-        _unsetenv(infos, infos->argv[index]);
+	return (0);
+}
 
-    return 0;
+/**
+ * populate_env_list - Populates env linked list.
+ * @info: Structure containing potential arguments. Used to maintain
+ *          constant function prototype.
+ * Return: Always 0.
+ */
+int populate_env_list(info_t *info)
+{
+	list_t *node = NULL;
+	size_t i;
+
+	for (i = 0; environ[i]; i++)
+		add_node_end(&node, environ[i], 0);
+	info->env = node;
+	return (0);
 }
 

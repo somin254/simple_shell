@@ -1,74 +1,73 @@
 #include "shell.h"
-#include <unistd.h>
 
 /**
- * interactive - Checks if the shell is in interactive mode.
- * @infos: Pointer to the info_t structure.
+ * interactive - Checks if the shell is in interactive mode
+ * @info: Pointer to the info_t struct
  *
- * Return: 1 if in interactive mode, 0 otherwise.
+ * Return: 1 if in interactive mode, 0 otherwise
  */
-int interactive(info_t *infos)
+int interactive(info_t *info)
 {
-    return (isatty(STDIN_FILENO) && infos->readfd <= 2);
+	return (isatty(STDIN_FILENO) && info->readfd <= 2);
 }
 
 /**
- * _isalpha - Checks if a character is alphabetic.
- * @ch: The character to check.
+ * is_delim - Checks if a character is a delimiter
+ * @c: The character to check
+ * @delim: The delimiter string
  *
- * Return: 1 if the character is alphabetic, 0 otherwise.
+ * Return: 1 if true, 0 if false
  */
-int _isalpha(int ch)
+int is_delim(char c, char *delim)
 {
-    return ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'));
+	while (*delim)
+		if (*delim++ == c)
+			return (1);
+	return (0);
 }
 
 /**
- * _atoi - Converts a string to an integer.
- * @str: The string to convert.
+ * _isalpha - Checks if a character is alphabetic
+ * @c: The character to check
  *
- * Return: If no numbers in the string, 0. Otherwise, the converted number.
+ * Return: 1 if c is alphabetic, 0 otherwise
  */
-int _atoi(char *str)
+int _isalpha(int c)
 {
-    int z, signs = 1, flags = 0, outputs;
-    unsigned int result = 0;
-
-    for (z = 0; str[z] != '\0' && flags != 2; z++)
-    {
-        if (str[z] == '-')
-            signs *= -1;
-        if (str[z] >= '0' && str[z] <= '9')
-        {
-            flags = 1;
-            result *= 10;
-            result += (str[z] - '0');
-        }
-        else if (flags == 1)
-            flags = 2;
-    }
-
-    if (signs == -1)
-        outputs = -result;
-    else
-        outputs = result;
-
-    return (outputs);
+	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
 }
 
 /**
- * is_delim - Checks if a character is a delimiter.
- * @ch: The character to check.
- * @delime: The delimiter string.
+ * _atoi - Converts a string to an integer
+ * @s: The string to be converted
  *
- * Return: 1 if true, 0 if false.
+ * Return: 0 if no numbers in the string, the converted number otherwise
  */
-int is_delim(char ch, char *delime)
+int _atoi(char *s)
 {
-    while (*delime)
-        if (*delime++ == ch)
-            return (1);
+	int i, sign = 1, flag = 0, output;
+	unsigned int result = 0;
 
-    return (0);
+	for (i = 0; s[i] != '\0' && flag != 2; i++)
+	{
+		if (s[i] == '-')
+			sign *= -1;
+
+		if (s[i] >= '0' && s[i] <= '9')
+		{
+			flag = 1;
+			result *= 10;
+			result += (s[i] - '0');
+		}
+		else if (flag == 1)
+			flag = 2;
+	}
+
+	if (sign == -1)
+		output = -result;
+	else
+		output = result;
+
+	return (output);
 }
 
