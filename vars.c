@@ -1,5 +1,7 @@
+#include "shell.h"
 #include <stddef.h>
 #include <stdlib.h>
+
 /**
  * is_chain - test if the current char in the buffer is a chain delimiter
  * @info: the parameter struct
