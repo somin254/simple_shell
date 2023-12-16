@@ -4,7 +4,7 @@
 #include <sys/wait.h>
 #include <stdlib.h>
 
-/* 
+/**
  * hsh - main shell loop
  * @info: the parameter & return info struct
  * @av: the argument vector from main()
@@ -55,7 +55,10 @@ int hsh(info_t *info, char **av)
  */
 void find_cmd(info_t *info)
 {
+	char *path = NULL;
+
 	/* ... (unchanged code) ... */
+
 	if (path)
 	{
 		info->path = path;
@@ -75,7 +78,7 @@ void find_cmd(info_t *info)
 }
 
 /**
- * fork_cmd - forks a an exec thread to run cmd
+ * fork_cmd - forks an exec thread to run cmd
  * @info: the parameter & return info struct
  *
  * Return: void

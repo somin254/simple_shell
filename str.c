@@ -52,13 +52,7 @@ int hsh(info_t *info, char **av)
  * @info: the parameter & return info struct
  *
  * Return: void
- */
-void find_cmd(info_t *info)
-{
-	/* ... (unchanged code) ... */
-}
-
-/**
+ *
  * fork_cmd - forks a an exec thread to run cmd
  * @info: the parameter & return info struct
  *
