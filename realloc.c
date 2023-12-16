@@ -1,3 +1,4 @@
+#include <stdlib.h>
 /**
  * _mem_set - fills memory with a constant byte
  * @s: the pointer to the memory area
