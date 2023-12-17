@@ -52,6 +52,7 @@ static int read_input(data_of_program *data, char buff[BUFFER_SIZE])
 int _getline(data_of_program *data)
 {
 	char buff[BUFFER_SIZE] = {'\0'};
+
 	return (read_input(data, buff));
 
 }
