@@ -58,6 +58,7 @@ int _mycd(info_t *infos)
 int _myhelp(info_t *infos)
 {
 	char **arg_array;
+
 	arg_array = infos->argv;
 	_puts("help call works. Function not yet implemented \n");
 
