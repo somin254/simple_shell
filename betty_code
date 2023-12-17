@@ -23,7 +23,7 @@ if (li[nread - 1] == '\n')
 {
 li[nread - 1] = '\0';
 }
-printf("%s\n", li);  // Use li instead of line
+printf("%s\n", li);
 }
 free(li);
 return 0;
