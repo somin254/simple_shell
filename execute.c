@@ -2,34 +2,31 @@
 
 /**
  * execute - shifts the process to execute another program
- * @array: list of the commands that are passed to the prompt
+ * @cmd_array: list of commands passed to the prompt
  * @environment: used in implementing clear command
  *
  * Return: Nothing
  */
 
-void execute(char *array[], char *const *environment)
+void execute(char *cmd_array[], char *const *environment)
 {
-    int status;
-    char *path, *token;
-    char *command_path = NULL;
-    size_t path_length = 0;
+    int process_status;
+    char *path, *token, cmd_path[1024];
+    struct stat file_stat;
+    pid_t process_id = fork();
 
-    struct stat st;
-    pid_t pid = fork();
-
-    if (pid == -1)
+    if (process_id == -1)
     {
         perror("Fork Failed!");
         exit(EXIT_FAILURE);
     }
-    else if (pid == 0)
+    else if (process_id == 0)
     {
-        if (array[0][0] == '/' || array[0][0] == '.')
+        if (cmd_array[0][0] == '/' || cmd_array[0][0] == '.')
         {
-            if (stat(array[0], &st) == 0 && S_ISREG(st.st_mode))
+            if (stat(cmd_array[0], &file_stat) == 0 && S_ISREG(file_stat.st_mode))
             {
-                if (execve(array[0], array, environment) == -1)
+                if (execve(cmd_array[0], cmd_array, environment) == -1)
                 {
                     perror("./shell");
                     exit(EXIT_FAILURE);
@@ -42,37 +39,28 @@ void execute(char *array[], char *const *environment)
             token = _strtok(path, ":");
             while (token != NULL)
             {
-                path_length = _strlen(token) + 1; // +1 for the '/'
-                path_length += _strlen(array[0]) + 1; // +1 for the null terminator
-                command_path = malloc(path_length);
-                if (command_path == NULL)
+                _strcpy(cmd_path, token);
+                _strcat(cmd_path, "/");
+                _strcat(cmd_path, cmd_array[0]);
+                if (stat(cmd_path, &file_stat) == 0 && S_ISREG(file_stat.st_mode))
                 {
-                    perror("Memory allocation failed");
-                    exit(EXIT_FAILURE);
-                }
-                _strcpy(command_path, token);
-                _strcat(command_path, "/");
-                _strcat(command_path, array[0]);
-                if (stat(command_path, &st) == 0 && S_ISREG(st.st_mode))
-                {
-                    if (execve(command_path, array, environment) == -1)
+                    if (execve(cmd_path, cmd_array, environment) == -1)
                     {
                         perror("./shell");
                         exit(EXIT_FAILURE);
                     }
                 }
-                free(command_path);
                 token = _strtok(NULL, ":");
             }
             write(STDERR_FILENO, "Command not found: ", 19);
-            write(STDERR_FILENO, array[0], _strlen(array[0]));
+            write(STDERR_FILENO, cmd_array[0], _strlen(cmd_array[0]));
             write(STDERR_FILENO, "\n", 1);
             exit(EXIT_FAILURE);
         }
     }
     else
     {
-        waitpid(pid, &status, 0);
+        waitpid(process_id, &process_status, 0);
     }
 }
 
