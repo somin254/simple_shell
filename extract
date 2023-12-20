@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <string.h>
+
+#define BUFFER_SIZE 1024
+
+void display_prompt(void)
+{
+    printf(":) ");
+}
+
+int main(void)
+{
+    char input_buffer[BUFFER_SIZE];
+
+    while (1)
+    {
+        display_prompt();
+
+        if (fgets(input_buffer, BUFFER_SIZE, stdin) == NULL)
+        {
+            /* Handle end of file (Ctrl+D) */
+            printf("\n");
+            break;
+        }
+
+        /* Remove the newline character */
+        input_buffer[strcspn(input_buffer, "\n")] = '\0';
+
+        /* Check if the command is empty */
+        if (input_buffer[0] == '\0')
+        {
+            continue;
+        }
+
+        /* Fork a new process */
+        pid_t child_pid = fork();
+
+        if (child_pid == -1)
+        {
+            perror("fork");
+            exit(EXIT_FAILURE);
+        }
+
+        if (child_pid == 0)
+        {
+            /* Child process */
+            char *arguments[32]; /* Adjust the array size accordingly */
+            char *token = strtok(input_buffer, " ");
+            int arg_index = 0;
+
+            while (token != NULL && arg_index < 31)
+            {
+                arguments[arg_index] = token;
+                token = strtok(NULL, " ");
+                arg_index++;
+            }
+
+            arguments[arg_index] = NULL; /* Null-terminate the array */
+
+            /* Check if the command exists in the PATH */
+            if (execvp(arguments[0], arguments) == -1)
+            {
+                /* Handle command not found */
+                perror(arguments[0]);
+                exit(EXIT_FAILURE);
+            }
+        }
+        else
+        {
+            /* Parent process */
+            /* Wait for the child to finish */
+            wait(NULL);
+        }
+    }
+
+    printf("\n");
+    return 0;
+}
+
