@@ -1,7 +1,8 @@
 #include "main.h"
+#include <ctype.h> /* Include for isspace function */
 
 /**
- * is_all_spaces - checks where a given string is composed of only spaces
+ * is_all_spaces - checks whether a given string is composed of only spaces
  * @str: pointer to a string to be checked
  *
  * Return: false if the string is not all spaces and true otherwise
@@ -9,13 +10,13 @@
 
 bool is_all_spaces(const char *str)
 {
-	while (*str != '\0')
-	{
-		if (*str != ' ' && *str != '\t' && *str != '\n' && *str != '\r')
-			return (false);
-		str++;
-	}
-	return (true);
+    while (*str != '\0')
+    {
+        if (!isspace((unsigned char)*str))
+            return false;
+        str++;
+    }
+    return true;
 }
 
 /**
@@ -28,11 +29,11 @@ bool is_all_spaces(const char *str)
 
 void check_line(ssize_t line_size, char *command)
 {
-	if (line_size == -1 || line_size == EOF)
-	{
-		free(command);
-		exit(EXIT_SUCCESS);
-	}
+    if (line_size == -1 || line_size == EOF)
+    {
+        free(command);
+        exit(EXIT_SUCCESS);
+    }
 }
 
 /**
@@ -44,7 +45,7 @@ void check_line(ssize_t line_size, char *command)
 
 void end_of_file(char **array)
 {
-	(void)array;
-
-	exit(EXIT_SUCCESS);
+    (void)array;
+    exit(EXIT_SUCCESS);
 }
+
